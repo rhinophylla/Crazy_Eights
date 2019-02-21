@@ -4,11 +4,13 @@ import random
 
 
 def player_card_display(player, player_hands):
+    """Print player's cards in a numbered list on the screen."""
     print("{0}, your hand contains the following cards: ".format(player))
     for index, element in enumerate(player_hands[player]):
         print("{0}: {1} of {2}".format(str(index+1), element[0], element[1]))
 
 def crazy_eight_player(top_card):
+    """Take player input on suit of a crazy eight and return card tuple."""
     suit_num = input(
         "What suit do you want your crazy eight to be?  Enter '1' for diamonds, '2' for hearts, '3' for clubs, and '4' for spades. ")
     while suit_num not in ['1', '2', '3', '4']:
@@ -27,15 +29,16 @@ def crazy_eight_player(top_card):
 
 
 def is_play_valid(player, player_hands, top_card):
+    """Take player input on next action and return integer."""
     try:
         card_index = input(
             "Enter the number of the card you want to play or enter 0 to draw a card. ")
         if card_index not in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']:
             print("You must enter a number.")
-            raise ValueError("You must enter an integer.")
+            raise ValueError
         if int(card_index) < -1 or int(card_index) > len(player_hands[player]):
             print("The number you entered does not correspond to a card in your hand.")
-            raise ValueError("The number you entered does not correspond to a card in your hand.")
+            raise ValueError
         card_index_adj = int(card_index) - 1
         if player_hands[player][card_index_adj][0] == 8:
             return card_index_adj
@@ -43,14 +46,10 @@ def is_play_valid(player, player_hands, top_card):
             return card_index_adj
         if top_card[0] == 8 and player_hands[player][card_index_adj][1] != top_card[1]:
             print("The suit of your card does not match the declared suit of the crazy eight!")
-            raise ValueError(
-                "The suit of your card does not match the declared suit of the crazy eight!")
+            raise ValueError
         if player_hands[player][card_index_adj][0] != top_card[0] and player_hands[player][card_index_adj][1] != top_card[1]:
             print("The number or suit of your card does not match the number or suit of the top card.")
-            print("player:", player_hands[player][card_index_adj])
-            print("top_card:", top_card)
-            raise ValueError(
-                "The number or suit of your card does not match the number or suit of the top card.")
+            raise ValueError
         return card_index_adj
     except:
         print("Invalid entry or card play.  Please try again.")
@@ -58,6 +57,23 @@ def is_play_valid(player, player_hands, top_card):
 
 
 def player_turn(player, player_hands, deck, card):
+    """Orchestrate steps of the player's turn and returns new top card tuple.
+
+    Arguments:
+    player -- inputed name of player
+    player_hands -- dictionary with the player and computer as keys and a list
+    of card tuples as values
+    deck -- list of card tuples
+    card -- current top card tuple
+
+    Returns:
+    top_card -- new top card tuple
+
+    Note:
+    If the deck is exhausted turn the player's turn, the alternate_game_ending
+    function is called.  This function does not return the expected card tuple,
+    but this is handled in the play_crazy_eights function.
+    """
     player_card_display(player, player_hands)
     card_index = is_play_valid(player, player_hands, card)
     while card_index == -1:
@@ -80,6 +96,22 @@ def player_turn(player, player_hands, deck, card):
 
 
 def computer_turn(player_hands, deck, card):
+    """Orchestrate steps of the computer's turn and returns new top card tuple.
+
+    Arguments:
+    player_hands -- dictionary with the player and computer as keys and a list
+    of card tuples as values
+    deck -- list of card tuples
+    card -- current top card tuple
+
+    Returns:
+    top_card -- new top card tuple
+
+    Note:
+    If the deck is exhausted turn the computer's turn, the alternate_game_ending
+    function is called.  This function does not return the expected card tuple,
+    but this is handled in the play_crazy_eights function.
+    """
     go = 1
     while go == 1:
         suits_dict = {"Spades": 0, "Clubs": 0, "Diamonds": 0, "Hearts": 0}
@@ -113,6 +145,23 @@ def computer_turn(player_hands, deck, card):
             return alternate_game_ending(player_hands, player)
 
 def play_crazy_eights(player, player_hands, deck, card):
+    """Alternate play between player and computer and return game winner.
+
+    Arguments:
+    player -- inputed name of player
+    player_hands -- dictionary with the player and computer as keys and a list
+    of card tuples as values
+    deck -- list of card tuples
+    card -- current top card tuple
+
+    Returns:
+    winner -- string
+
+    Note:
+    If the alternate_game_ending function was called during computer_turn or
+    player_turn, None was returned instead of a card tuple. To catch this, try
+    and except is used to detect the expected TypeError and the program quits.
+    """
     top_card = player_turn(player, player_hands, deck, card)
     game_continues = 1
     while game_continues == 1:
@@ -135,6 +184,7 @@ def play_crazy_eights(player, player_hands, deck, card):
 
 
 def calculate_points(player_hands):
+    """Calculate hand totals and return the results in a dictionary."""
     results = {}
     for key, value in player_hands.items():
         points = 0
@@ -152,6 +202,7 @@ def calculate_points(player_hands):
 
 
 def alternate_game_ending(player_hands, player):
+    """Implement if the deck runs out of cards to determine winner."""
     print("Since the deck ran out of cards, we will use points to determine the winner.")
     print("The player with the lowest number of points wins.")
     results_dict = calculate_points(player_hands)
@@ -165,22 +216,23 @@ def alternate_game_ending(player_hands, player):
         print("It's a tie!")
     return
 
-
+# generate shuffled deck of cards
 deck = list(itertools.product(
     ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'],
     ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
 random.shuffle(deck)
 
-"""
-deck = list(itertools.product(
-    [ 8, 9, 10, 'Jack', 'Queen', 'King'],
-    ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
-random.shuffle(deck)
-"""
+# alternate deck for game testing
+#deck = list(itertools.product(
+    #[ 8, 9, 10, 'Jack', 'Queen', 'King'],
+    #['Spades', 'Hearts', 'Diamonds', 'Clubs']))
+#random.shuffle(deck)
 
+# method to make deck smaller for game testing
 #for i in range(35):
     #deck.pop()
 
+# initation of game, creation of player hands, intial top card
 print("Welcome to Crazy Eights!")
 player = input("Player, what is your name? ")
 
@@ -199,5 +251,6 @@ if starter_card[0] == 8:
     starter_card = crazy_eight_player(starter_card)
     print("Since the top card is a crazy eight, {0} choose {1} as the suit.".format(player, starter_card[1]))
 
+# game play and winner declaration
 winner = play_crazy_eights(player, player_hands, deck, starter_card)
 print("The game is over!  Congratulations to the victor, {0}".format(winner))
