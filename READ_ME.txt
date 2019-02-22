@@ -1,41 +1,21 @@
-Game  = Crazy Eights
+This is a python implementation of the classic children's card game, Crazy Eights.
 
-Rules from Wikipedia (https://en.wikipedia.org/wiki/Crazy_Eights):
+To play the game, download the file "Crazy_Eight.py", and run on your python interpreter.
 
-Five cards are dealt to each player (or seven in a two-player game).[4] The remaining cards of the deck are placed face down
-at the center of the table. The top card is then turned face up to start the game.
+Complete rules for the game can be found at https://en.wikipedia.org/wiki/Crazy_Eights.
 
-Players discard by matching rank or suit with the top card of the discard pile, starting with the player left of the dealer.
-They can also play any 8 at any time. If a player is unable to match the rank or suit of the top card of the discard pile
-and does not have an 8, they draw a card from the stockpile. When a player plays an 8, they must declare the suit that the
-next player is to play; that player must then follow the named suit or play another 8.
+In this version of the game, it is you versus the computer!  You and the computer are each dealt
+7 cards and a top card is turned face up.  The remaining cards in the deck become the stockpile.
+You go first and you must match either the suit or the face value of the top card.  The card you play
+becomes the new top card and the computer then takes a turn trying to match it.  Play continues alternating
+between you and computer.  If a player cannot match the top card, they must draw from the stockpile until
+they can do so.  In this game, 8s are wild and if a player plays an 8, they specify a suit that the next
+played card must match.  Play continues until a player plays all their cards and they are declared the
+winner.  If the stockpile runs out of cards before this happens, then the winner is determined using a point
+method.  Points are tabulated for the computer and your hands and the player with the lowest point total wins.
+8s are worth 50 points, court cards are worth 10 points, and all other cards (including aces) are worth their
+pip value.
 
-As an example: Once 6♣ is played the next player:
-  -can play any of the other 6s
-  -can play any of the clubs
-  -can play any 8 (then must declare a suit)
-  -can draw from the stockpile until willing and able to play one of the above
+Enjoy the game!
 
-The game ends as soon as one player has emptied their hand. That player collects a payment from each opponent equal to the
-point score of the cards remaining in that opponent's hand. 8s score 50, court cards 10 and all other cards face value. If
-the players run out of cards in the deck, the player with the lowest point score in their hand scores the difference between
-that hand and each opponent's hand.[1]
-
-The winner of the game is the first player to reach a specific number of points. For two players it is 100 points,
-three players 150, four 200, five 250, six 300 and for seven players 350.
-
-
-1.  Create and shuffle the deck
-2.  Deal cards
-3.  Turn over top cards
-4.  Alternating game play - player then computer - repeat
-5.  During each hand:
-      Determine if player can play
-      If so, play
-      If not, draw until the player can play
-6.  Mechanism for naming a suit if an 8 is played
-7.  When a player runs out of cards or the draw pile empties, calculate the score.
-8.  Keep score and declare the game over when on player reaches 100 points.
-
-
-Tests
+I welcome any feedback on improving the play experience or the code.

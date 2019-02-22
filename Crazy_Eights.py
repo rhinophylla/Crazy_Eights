@@ -242,6 +242,7 @@ def alt_deck():
     random.shuffle(deck)
     return deck
 
+
 def short_deck():
     """Create a list of 18 of card tuples for game testing."""
     deck = list(itertools.product(
@@ -257,7 +258,7 @@ def short_deck():
 print("Welcome to Crazy Eights!")
 player = input("Player, what is your name? ")
 
-deck = short_deck()
+deck = card_deck()
 
 player_hands = {
     player: [deck.pop() for i in range(7)],
