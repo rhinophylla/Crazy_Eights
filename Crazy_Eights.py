@@ -161,8 +161,16 @@ def play_crazy_eights(player, player_hands, deck, card):
     If the alternate_game_ending function was called during computer_turn or
     player_turn, None was returned instead of a card tuple. To catch this, try
     and except is used to detect the expected TypeError and the program quits.
+
+    The same problem will occur if the player draws the remainder of the deck
+    during their first time so the same try/except call is used to detect this
+    and to end the game.
     """
     top_card = player_turn(player, player_hands, deck, card)
+    try:
+        x = top_card[0]
+    except TypeError:
+        quit()
     game_continues = 1
     while game_continues == 1:
         top_card = computer_turn(player_hands, deck, top_card)
@@ -208,36 +216,48 @@ def alternate_game_ending(player_hands, player):
     results_dict = calculate_points(player_hands)
     for key, value in results_dict.items():
         print("{0}, you earned {1} points.".format(key, value))
-    if player_hands[player] < player_hands["Computer"]:
-        print("{0} is the winner with {1} points! Congratulations!".format(player, player_hands[player]))
-    elif player_hands[player] > player_hands["Computer"]:
-        print("Computer is the winner with {0} points! Congratulations!".format(player_hands['Computer']))
+    if results_dict[player] < results_dict["Computer"]:
+        print("{0} is the winner with {1} points! Congratulations!".format(player, results_dict[player]))
+    elif results_dict[player] > results_dict["Computer"]:
+        print("Computer is the winner with {0} points! Congratulations!".format(results_dict['Computer']))
     else:
         print("It's a tie!")
     return
 
-# generate shuffled deck of cards
-deck = list(itertools.product(
+
+def card_deck():
+    """Create list of 52 tuples representing standard playing cards."""
+    deck = list(itertools.product(
     ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'],
     ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
-random.shuffle(deck)
+    random.shuffle(deck)
+    return deck
 
-# alternate deck for game testing
-"""
-deck = list(itertools.product(
-   [ 8, 9, 10, 'Jack', 'Queen', 'King']
-   ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
-random.shuffle(deck)
-"""
-# method to make deck smaller for game testing
-"""
-for i in range(35):
-    deck.pop()
-"""
+
+def alt_deck():
+    """Create list of 30 card tuples with four 8s for game testing."""
+    deck = list(itertools.product(
+    [ 8, 9, 10, 'Jack', 'Queen', 'King']
+    ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
+    random.shuffle(deck)
+    return deck
+
+def short_deck():
+    """Create a list of 18 of card tuples for game testing."""
+    deck = list(itertools.product(
+    ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'],
+    ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
+    random.shuffle(deck)
+    for i in range((34)):
+        deck.pop()
+    return deck
+
 
 # initation of game, creation of player hands, reveal of intial top card
 print("Welcome to Crazy Eights!")
 player = input("Player, what is your name? ")
+
+deck = short_deck()
 
 player_hands = {
     player: [deck.pop() for i in range(7)],
