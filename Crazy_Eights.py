@@ -11,22 +11,22 @@ def player_card_display(player, player_hands):
 
 def crazy_eight_player(top_card):
     """Take player input on suit of a crazy eight and return card tuple."""
-    suit_num = input(
-        "What suit do you want your crazy eight to be?  Enter '1' for diamonds, '2' for hearts, '3' for clubs, and '4' for spades. ")
-    while suit_num not in ['1', '2', '3', '4']:
-        print("You did not enter a 1, 2, 3, or 4.  Please try again.")
-        suit_num = input(
-            "What suit do you want your crazy eight to be?  Enter '1' for diamonds, '2' for hearts, '3' for clubs, and '4' for spades. ")
-    if suit_num == '1':
-        top_card = (8, "Diamonds")
-    elif suit_num == '2':
-        top_card = (8, "Hearts")
-    elif suit_num == '3':
-        top_card = (8, "Clubs")
-    else:
-        top_card = (8, "Spades")
+    suit = input("What suit do you want your crazy eight to be? ")
+    try:
+        if suit[0].lower() == 'd':
+            top_card = (8, "Diamonds")
+        elif suit[0].lower() == 'h':
+            top_card = (8, "Hearts")
+        elif suit[0].lower() == 'c':
+            top_card = (8, "Clubs")
+        elif suit[0].lower() == 's':
+            top_card = (8, "Spades")
+        else:
+            raise ValueError
+    except:
+        print("You didn't enter diamonds, hearts, clubs, or spades.  Please try again.")
+        return crazy_eight_player(top_card)
     return top_card
-
 
 def is_play_valid(player, player_hands, top_card):
     """Take player input on next action and return integer."""
@@ -57,7 +57,7 @@ def is_play_valid(player, player_hands, top_card):
 
 
 def player_turn(player, player_hands, deck, card):
-    """Orchestrate steps of the player's turn and returns new top card tuple.
+    """Orchestrate steps of the player's turn and return new top card tuple.
 
     Arguments:
     player -- inputed name of player
@@ -96,7 +96,7 @@ def player_turn(player, player_hands, deck, card):
 
 
 def computer_turn(player_hands, deck, card):
-    """Orchestrate steps of the computer's turn and returns new top card tuple.
+    """Orchestrate steps of the computer's turn and return new top card tuple.
 
     Arguments:
     player_hands -- dictionary with the player and computer as keys and a list
@@ -202,7 +202,7 @@ def calculate_points(player_hands):
 
 
 def alternate_game_ending(player_hands, player):
-    """Implement if the deck runs out of cards to determine winner."""
+    """Determine winner if deck runs out of card tuples."""
     print("Since the deck ran out of cards, we will use points to determine the winner.")
     print("The player with the lowest number of points wins.")
     results_dict = calculate_points(player_hands)
@@ -223,16 +223,19 @@ deck = list(itertools.product(
 random.shuffle(deck)
 
 # alternate deck for game testing
-#deck = list(itertools.product(
-    #[ 8, 9, 10, 'Jack', 'Queen', 'King'],
-    #['Spades', 'Hearts', 'Diamonds', 'Clubs']))
-#random.shuffle(deck)
-
+"""
+deck = list(itertools.product(
+   [ 8, 9, 10, 'Jack', 'Queen', 'King']
+   ['Spades', 'Hearts', 'Diamonds', 'Clubs']))
+random.shuffle(deck)
+"""
 # method to make deck smaller for game testing
-#for i in range(35):
-    #deck.pop()
+"""
+for i in range(35):
+    deck.pop()
+"""
 
-# initation of game, creation of player hands, intial top card
+# initation of game, creation of player hands, reveal of intial top card
 print("Welcome to Crazy Eights!")
 player = input("Player, what is your name? ")
 
